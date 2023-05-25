@@ -1,0 +1,4 @@
+apple,€блоко
+banana,банан
+carrot,морковь
+dog,собака
