@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <fstream>
 #include "Dictionary.h"
 
@@ -20,7 +20,7 @@ int main() {
         file.close();
     }
     else {
-        cout << "Unable to open file" << endl;
+        cout << "Невозможно открыть файл" << endl;
         return 0;
     }
     vector<vector<string>> translations;
@@ -34,7 +34,7 @@ int main() {
     }
 
     if (translations.size() > 0) {
-        cout << "Translations of 'apple':" << endl;
+        cout << "Перевод слова 'apple':" << endl;
         for (int i = 0; i < 2; i++) {
             for (size_t j = 0; j < translations[i].size(); j++)
             {
@@ -43,7 +43,7 @@ int main() {
         }
     }
     else {
-        cout << "Translation not found" << endl;
+        cout << "Перевод не найден" << endl;
     }
     return 0;
 }
