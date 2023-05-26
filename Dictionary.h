@@ -39,7 +39,7 @@ public:
             root->numKeys = 1;
         }
         else {
-            // Шаг 1: Найти лиcт, в который нужно добавить key
+            // РЁР°Рі 1: РќР°Р№С‚Рё Р»РёcС‚, РІ РєРѕС‚РѕСЂС‹Р№ РЅСѓР¶РЅРѕ РґРѕР±Р°РІРёС‚СЊ key
             Node* current = root;
             while (!current->isLeaf) {
                 int i;
@@ -51,7 +51,7 @@ public:
                 current = current->children[i];
             }
             
-            // Шаг 2: Проверить если key уже существует в листе
+            // РЁР°Рі 2: РџСЂРѕРІРµСЂРёС‚СЊ РµСЃР»Рё key СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓРµС‚ РІ Р»РёСЃС‚Рµ
             for (int i = 0; i < current->numKeys; i++) {
                 if (current->keys[i] == key) {
                     current->values[i].push_back(value);
@@ -59,7 +59,7 @@ public:
                 }
             }
 
-            // Шаг 3: Вставить новоую пару key-value в лист
+            // РЁР°Рі 3: Р’СЃС‚Р°РІРёС‚СЊ РЅРѕРІРѕСѓСЋ РїР°СЂСѓ key-value РІ Р»РёСЃС‚
             int i = current->numKeys - 1;
             while (i >= 0 && current->keys[i] > key) {
                 current->keys[i + 1] = current->keys[i];
@@ -71,7 +71,7 @@ public:
             current->numKeys++;
             cout << key << ": " << value << " " << current->numKeys << " " << current->values[current->numKeys - 1].back() << endl;
 
-            // Шаг 4: Проверить если лист полный то необходимо его разбить
+            // РЁР°Рі 4: РџСЂРѕРІРµСЂРёС‚СЊ РµСЃР»Рё Р»РёСЃС‚ РїРѕР»РЅС‹Р№ С‚Рѕ РЅРµРѕР±С…РѕРґРёРјРѕ РµРіРѕ СЂР°Р·Р±РёС‚СЊ
             if (current->numKeys == 2) {
                 cout << "full" << endl;
                 Node* parent = findParent(current);
@@ -105,49 +105,49 @@ public:
     }
 
     void deleteKey(Node* root, string key) {
-        // Найти узел, содержащий удаляемый ключ
+        // РќР°Р№С‚Рё СѓР·РµР», СЃРѕРґРµСЂР¶Р°С‰РёР№ СѓРґР°Р»СЏРµРјС‹Р№ РєР»СЋС‡
         int i = 0;
         while (i < root->numKeys && key > root->keys[i]) {
             i++;
         }
         if (root->keys[i] == key && root->isLeaf) {
-            // Узел является листом, удалить ключ из него
+            // РЈР·РµР» СЏРІР»СЏРµС‚СЃСЏ Р»РёСЃС‚РѕРј, СѓРґР°Р»РёС‚СЊ РєР»СЋС‡ РёР· РЅРµРіРѕ
             for (int j = i; j < root->numKeys - 1; j++) {
                 root->keys[j] = root->keys[j + 1];
                 root->values[j] = root->values[j + 1];
             }
             root->numKeys--;
-            // Выполнить необходимые операции для поддержания свойств 2, 3-дерева
+            // Р’С‹РїРѕР»РЅРёС‚СЊ РЅРµРѕР±С…РѕРґРёРјС‹Рµ РѕРїРµСЂР°С†РёРё РґР»СЏ РїРѕРґРґРµСЂР¶Р°РЅРёСЏ СЃРІРѕР№СЃС‚РІ 2, 3-РґРµСЂРµРІР°
             fixDelete(root);
         }
         else if (!root->isLeaf) {
-            // Найти предшественника или преемника удаляемого ключа
+            // РќР°Р№С‚Рё РїСЂРµРґС€РµСЃС‚РІРµРЅРЅРёРєР° РёР»Рё РїСЂРµРµРјРЅРёРєР° СѓРґР°Р»СЏРµРјРѕРіРѕ РєР»СЋС‡Р°
             Node* child = root->children[i];
             while (!child->isLeaf) {
                 child = child->children[child->numKeys];
             }
             string pred = child->keys[child->numKeys - 1];
-            // Заменить удаляемый ключ предшественником
+            // Р—Р°РјРµРЅРёС‚СЊ СѓРґР°Р»СЏРµРјС‹Р№ РєР»СЋС‡ РїСЂРµРґС€РµСЃС‚РІРµРЅРЅРёРєРѕРј
             root->keys[i] = pred;
             root->values[i] = child->values[child->numKeys - 1];
-            // Рекурсивно удалить предшественника из соответствующего поддерева
+            // Р РµРєСѓСЂСЃРёРІРЅРѕ СѓРґР°Р»РёС‚СЊ РїСЂРµРґС€РµСЃС‚РІРµРЅРЅРёРєР° РёР· СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РµРіРѕ РїРѕРґРґРµСЂРµРІР°
             deleteKey(child, pred);
         }
     }
 
 private:
     void split(Node* node, Node* parent, Node*& root) {
-        // Создать новый узел, содержащий вторую пару key-value
+        // РЎРѕР·РґР°С‚СЊ РЅРѕРІС‹Р№ СѓР·РµР», СЃРѕРґРµСЂР¶Р°С‰РёР№ РІС‚РѕСЂСѓСЋ РїР°СЂСѓ key-value
         Node* newNode = new Node();
         newNode->numKeys = 1;
         newNode->keys[0] = node->keys[1];
         newNode->values[0] = node->values[1];
         newNode->isLeaf = node->isLeaf;
 
-        // Обновить оригинальный узел, чтобы он содержал только первую пару key-value
+        // РћР±РЅРѕРІРёС‚СЊ РѕСЂРёРіРёРЅР°Р»СЊРЅС‹Р№ СѓР·РµР», С‡С‚РѕР±С‹ РѕРЅ СЃРѕРґРµСЂР¶Р°Р» С‚РѕР»СЊРєРѕ РїРµСЂРІСѓСЋ РїР°СЂСѓ key-value
         node->numKeys = 1;
 
-        // Если оригинальный узел не лист, переместить потомков в новый узел
+        // Р•СЃР»Рё РѕСЂРёРіРёРЅР°Р»СЊРЅС‹Р№ СѓР·РµР» РЅРµ Р»РёСЃС‚, РїРµСЂРµРјРµСЃС‚РёС‚СЊ РїРѕС‚РѕРјРєРѕРІ РІ РЅРѕРІС‹Р№ СѓР·РµР»
         if (!node->isLeaf) {
             newNode->children[0] = node->children[1];
             newNode->children[1] = node->children[2];
@@ -155,14 +155,14 @@ private:
             node->children[2] = nullptr;
         }
 
-        // Если родитель null, создать новый корневой узел
+        // Р•СЃР»Рё СЂРѕРґРёС‚РµР»СЊ null, СЃРѕР·РґР°С‚СЊ РЅРѕРІС‹Р№ РєРѕСЂРЅРµРІРѕР№ СѓР·РµР»
         if (parent == nullptr) {
             cout << "parent is null" << endl;
             parent = new Node();
             root = parent;
         }
 
-        // Вставить вторую пару key-value и нового потомка в родителя
+        // Р’СЃС‚Р°РІРёС‚СЊ РІС‚РѕСЂСѓСЋ РїР°СЂСѓ key-value Рё РЅРѕРІРѕРіРѕ РїРѕС‚РѕРјРєР° РІ СЂРѕРґРёС‚РµР»СЏ
         int i = parent->numKeys - 1;
         cout << i;
         while (i >= 0 && parent->keys[i] > node->keys[0]) {
@@ -174,7 +174,7 @@ private:
         parent->children[i + 2] = newNode;
         parent->numKeys++;
 
-        // Если родительский узел стал полный, разбить его рекурсивно
+        // Р•СЃР»Рё СЂРѕРґРёС‚РµР»СЊСЃРєРёР№ СѓР·РµР» СЃС‚Р°Р» РїРѕР»РЅС‹Р№, СЂР°Р·Р±РёС‚СЊ РµРіРѕ СЂРµРєСѓСЂСЃРёРІРЅРѕ
         if (parent->numKeys == 3) {
             Node* grandparent = nullptr;
             split(parent, grandparent, root);
@@ -196,20 +196,20 @@ private:
 
     void fixDelete(Node* f_root) {
         if (f_root->numKeys < 1) {
-            // Узел содержит менее одного ключа, удалить его
+            // РЈР·РµР» СЃРѕРґРµСЂР¶РёС‚ РјРµРЅРµРµ РѕРґРЅРѕРіРѕ РєР»СЋС‡Р°, СѓРґР°Р»РёС‚СЊ РµРіРѕ
             if (f_root == f_root->children[0]) {
-                // Узел является корнем, сделать его единственным потомком
+                // РЈР·РµР» СЏРІР»СЏРµС‚СЃСЏ РєРѕСЂРЅРµРј, СЃРґРµР»Р°С‚СЊ РµРіРѕ РµРґРёРЅСЃС‚РІРµРЅРЅС‹Рј РїРѕС‚РѕРјРєРѕРј
                 f_root = f_root->children[1];
             }
             else {
-                // Найти брата узла и выполнить операции для поддержания свойств 2, 3-дерева
+                // РќР°Р№С‚Рё Р±СЂР°С‚Р° СѓР·Р»Р° Рё РІС‹РїРѕР»РЅРёС‚СЊ РѕРїРµСЂР°С†РёРё РґР»СЏ РїРѕРґРґРµСЂР¶Р°РЅРёСЏ СЃРІРѕР№СЃС‚РІ 2, 3-РґРµСЂРµРІР°
                 Node* parent = findParent(f_root);
                 int i = 0;
                 while (i < parent->numKeys && parent->children[i] != f_root) {
                     i++;
                 }
                 if (i > 0 && parent->children[i - 1]->numKeys > 1) {
-                    // Использовать ключ из левого брата
+                    // РСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РєР»СЋС‡ РёР· Р»РµРІРѕРіРѕ Р±СЂР°С‚Р°
                     Node* leftSibling = parent->children[i - 1];
                     f_root->keys[0] = parent->keys[i - 1];
                     f_root->values[0] = parent->values[i - 1];
@@ -218,7 +218,7 @@ private:
                     leftSibling->numKeys--;
                 }
                 else if (i < parent->numKeys && parent->children[i + 1]->numKeys > 1) {
-                    // Использовать ключ из правого брата
+                    // РСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РєР»СЋС‡ РёР· РїСЂР°РІРѕРіРѕ Р±СЂР°С‚Р°
                     Node* rightSibling = parent->children[i + 1];
                     f_root->keys[0] = parent->keys[i];
                     f_root->values[0] = parent->values[i];
@@ -231,7 +231,7 @@ private:
                     rightSibling->numKeys--;
                 }
                 else {
-                    // Объединить с братом
+                    // РћР±СЉРµРґРёРЅРёС‚СЊ СЃ Р±СЂР°С‚РѕРј
                     if (i > 0) {
                         Node* leftSibling = parent->children[i - 1];
                         leftSibling->keys[leftSibling->numKeys] = parent->keys[i - 1];
@@ -241,7 +241,7 @@ private:
                             leftSibling->values[leftSibling->numKeys + j + 1] = f_root->values[j];
                         }
                         leftSibling->numKeys += f_root->numKeys + 1;
-                        // Удалить узел из родительского узла
+                        // РЈРґР°Р»РёС‚СЊ СѓР·РµР» РёР· СЂРѕРґРёС‚РµР»СЊСЃРєРѕРіРѕ СѓР·Р»Р°
                         for (int j = i - 1; j < parent->numKeys - 1; j++) {
                             parent->keys[j] = parent->keys[j + 1];
                             parent->values[j] = parent->values[j + 1];
@@ -259,7 +259,7 @@ private:
                             f_root->values[f_root->numKeys + j + 1] = rightSibling->values[j];
                         }
                         f_root->numKeys += rightSibling->numKeys + 1;
-                        // Удалить узел из родительского узла
+                        // РЈРґР°Р»РёС‚СЊ СѓР·РµР» РёР· СЂРѕРґРёС‚РµР»СЊСЃРєРѕРіРѕ СѓР·Р»Р°
                         for (int j = i; j < parent->numKeys - 1; j++) {
                             parent->keys[j] = parent->keys[j + 1];
                             parent->values[j] = parent->values[j + 1];
@@ -268,7 +268,7 @@ private:
                         parent->numKeys--;
                         delete rightSibling;
                     }
-                    // Проверить свойства 2, 3-дерева для родительского узла
+                    // РџСЂРѕРІРµСЂРёС‚СЊ СЃРІРѕР№СЃС‚РІР° 2, 3-РґРµСЂРµРІР° РґР»СЏ СЂРѕРґРёС‚РµР»СЊСЃРєРѕРіРѕ СѓР·Р»Р°
                     if (parent->numKeys < 1) {
                         fixDelete(parent);
                     }
